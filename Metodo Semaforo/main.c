@@ -16,7 +16,9 @@ int main()
 	
 	
 	
+	ponte_delete(ponte);
 	
+	free(pessoa);
 	
 	printf("\nOk\n\n");
 
