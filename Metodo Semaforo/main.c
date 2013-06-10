@@ -1,24 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <stdlib.h>
+#include <unistd.h>
 #include "ponte.h"
-#include "pessoa.h"
+#include "crianca.h"
 #include "semaforo.h"
 
 int main()
 {
 	Ponte *ponte = ponte_create();
 	
-	Pessoa *pessoa = pessoa_create("Luciano");
+	Crianca *crianca = crianca_create(getpid());
 	
-	printf("\nNome: %s\n", pessoa->nome);
+	printf("\nNome: %d\n", crianca->numeroProcesso);
 	
 	
 	
 	ponte_delete(ponte);
 	
-	free(pessoa);
+	free(crianca);
 	
 	printf("\nOk\n\n");
 

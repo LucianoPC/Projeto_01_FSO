@@ -59,6 +59,13 @@ void semaforo_down(Semaforo *semaforo)
 	}
 }
 
+int semaforo_getValue(Semaforo *semaforo)
+{
+	int valorSemaforo;
+	valorSemaforo = semctl(semaforo->identificador, 0, GETVAL, 0);
+	return valorSemaforo;
+}
+
 key_t criar_chave(int projeto_identificador)
 {
 	key_t chave;
