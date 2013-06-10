@@ -7,8 +7,8 @@
 
 typedef struct _SemaforoBidimensional
 {
-	Semaforo *semaforoUm;
-	Semaforo *semaforoDois;
+	Semaforo *semaforoEsquerda;
+	Semaforo *semaforoDireita;
 	
 	Semaforo *semaforoMediador;
 
@@ -18,8 +18,8 @@ SemaforoBidimensional * semaforoBidimensional_create()
 {
 	SemaforoBidimensional *semaforoBidimensional = malloc(sizeof(SemaforoBidimensional));
 	
-	semaforoBidimensional->semaforoUm = semaforo_create('U');
-	semaforoBidimensional->semaforoDois = semaforo_create('D');
+	semaforoBidimensional->semaforoEsquerda = semaforo_create('U');
+	semaforoBidimensional->semaforoDireita = semaforo_create('D');
 	semaforoBidimensional->semaforoMediador = semaforo_create('M');
 	
 	semaforo_up(semaforoBidimensional->semaforoMediador);
@@ -29,78 +29,78 @@ SemaforoBidimensional * semaforoBidimensional_create()
 
 void semaforoBidimensional_delete(SemaforoBidimensional *semaforoBidimensional)
 {
-	semaforo_delete(semaforoBidimensional->semaforoUm);
-	semaforo_delete(semaforoBidimensional->semaforoDois);
+	semaforo_delete(semaforoBidimensional->semaforoEsquerda);
+	semaforo_delete(semaforoBidimensional->semaforoDireita);
 	semaforo_delete(semaforoBidimensional->semaforoMediador);
 	
 	free(semaforoBidimensional);
 }
 
 
-void semaforoBidimensional_semaforoUm_utilize(SemaforoBidimensional *semaforoBidimensional)
+void semaforoBidimensional_semaforoEsquerda_utilize(SemaforoBidimensional *semaforoBidimensional)
 {
-	int valor_semaforoUm;
+	int valor_semaforoEsquerda;
 	
-	valor_semaforoUm = semaforo_getValue(semaforoBidimensional->semaforoUm);
+	valor_semaforoEsquerda = semaforo_getValue(semaforoBidimensional->semaforoEsquerda);
 	
-	if(valor_semaforoUm == 0)
+	if(valor_semaforoEsquerda == 0)
 		semaforo_down(semaforoBidimensional->semaforoMediador);
 	
-	semaforo_up(semaforoBidimensional->semaforoUm);
+	semaforo_up(semaforoBidimensional->semaforoEsquerda);
 }
 
-void semaforoBidimensional_semaforoDois_utilize(SemaforoBidimensional *semaforoBidimensional)
+void semaforoBidimensional_semaforoDireita_utilize(SemaforoBidimensional *semaforoBidimensional)
 {
-	int valor_semaforoDois;
+	int valor_semaforoDireita;
 	
-	valor_semaforoDois = semaforo_getValue(semaforoBidimensional->semaforoDois);
+	valor_semaforoDireita = semaforo_getValue(semaforoBidimensional->semaforoDireita);
 	
-	if(valor_semaforoDois == 0)
+	if(valor_semaforoDireita == 0)
 		semaforo_down(semaforoBidimensional->semaforoMediador);
 	
-	semaforo_up(semaforoBidimensional->semaforoDois);
+	semaforo_up(semaforoBidimensional->semaforoDireita);
 }
 
-void semaforoBidimensional_semaforoUm_terminate(SemaforoBidimensional *semaforoBidimensional)
+void semaforoBidimensional_semaforoEsquerda_terminate(SemaforoBidimensional *semaforoBidimensional)
 {
-	int valor_semaforoUm;
+	int valor_semaforoEsquerda;
 	
-	semaforo_down(semaforoBidimensional->semaforoUm);
+	semaforo_down(semaforoBidimensional->semaforoEsquerda);
 	
-	valor_semaforoUm = semaforo_getValue(semaforoBidimensional->semaforoUm);
+	valor_semaforoEsquerda = semaforo_getValue(semaforoBidimensional->semaforoEsquerda);
 	
-	if(valor_semaforoUm == 0)
+	if(valor_semaforoEsquerda == 0)
 		semaforo_up(semaforoBidimensional->semaforoMediador);
 }
 
-void semaforoBidimensional_semaforoDois_terminate(SemaforoBidimensional *semaforoBidimensional)
+void semaforoBidimensional_semaforoDireita_terminate(SemaforoBidimensional *semaforoBidimensional)
 {
-	int valor_semaforoDois;
+	int valor_semaforoDireita;
 	
-	semaforo_down(semaforoBidimensional->semaforoDois);
+	semaforo_down(semaforoBidimensional->semaforoDireita);
 	
-	valor_semaforoDois = semaforo_getValue(semaforoBidimensional->semaforoDois);
+	valor_semaforoDireita = semaforo_getValue(semaforoBidimensional->semaforoDireita);
 	
-	if(valor_semaforoDois == 0)
+	if(valor_semaforoDireita == 0)
 		semaforo_up(semaforoBidimensional->semaforoMediador);
 }
 
-int semaforoBidimensional_semaforoUm_getValue(SemaforoBidimensional *semaforoBidimensional)
+int semaforoBidimensional_semaforoEsquerda_getValue(SemaforoBidimensional *semaforoBidimensional)
 {
-	int valor_semaforoUm;
+	int valor_semaforoEsquerda;
 	
-	valor_semaforoUm = semaforo_getValue(semaforoBidimensional->semaforoUm);
+	valor_semaforoEsquerda = semaforo_getValue(semaforoBidimensional->semaforoEsquerda);
 	
-	return valor_semaforoUm;
+	return valor_semaforoEsquerda;
 }
 
-int semaforoBidimensional_semaforoDois_getValue(SemaforoBidimensional *semaforoBidimensional)
+int semaforoBidimensional_semaforoDireita_getValue(SemaforoBidimensional *semaforoBidimensional)
 {
-	int valor_semaforoDois;
+	int valor_semaforoDireita;
 	
-	valor_semaforoDois = semaforo_getValue(semaforoBidimensional->semaforoDois);
+	valor_semaforoDireita = semaforo_getValue(semaforoBidimensional->semaforoDireita);
 	
-	return valor_semaforoDois;
+	return valor_semaforoDireita;
 }
 
 int semaforoBidimensional_semaforoMediador_getValue(SemaforoBidimensional *semaforoBidimensional)

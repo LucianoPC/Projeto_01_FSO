@@ -3,18 +3,38 @@
 
 #include <stdlib.h>
 
-#define ATRAVESSANDO 1
-#define NAO_ATRAVESSANDO 0
+#define ESQUERDA 0
+#define DIREITA 1
 
 typedef struct _Crianca{
 	int numeroProcesso;
+	int tempoDecisao;
+	int lado;
 }Crianca;
 
-Crianca * crianca_create(int numeroProcesso)
+Crianca * crianca_create(int numeroProcesso, int tempoDecisao, int lado)
 {
 	Crianca *crianca = malloc(sizeof(Crianca));
 	crianca->numeroProcesso = numeroProcesso;
+	crianca->tempoDecisao = tempoDecisao;
+	crianca->lado = lado;
+	
 	return crianca;
+}
+
+crianca_delete(Crianca *crianca)
+{
+	free(crianca);
+}
+
+crianca_ESQUERDA()
+{
+	return ESQUERDA;
+}
+
+crianca_DIREITA()
+{
+	return DIREITA;
 }
 
 #endif

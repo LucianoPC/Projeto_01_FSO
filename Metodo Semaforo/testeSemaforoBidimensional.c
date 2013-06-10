@@ -3,31 +3,31 @@
 
 void imprimirIdentificadores(SemaforoBidimensional *semaforo)
 {
-	int id_semaforoUm;
-	int id_semaforoDois;
+	int id_semaforoEsquerda;
+	int id_semaforoDireita;
 	int id_semaforoMediador;
 	
-	id_semaforoUm = semaforo->semaforoUm->identificador;
-	id_semaforoDois = semaforo->semaforoDois->identificador;
+	id_semaforoEsquerda = semaforo->semaforoEsquerda->identificador;
+	id_semaforoDireita = semaforo->semaforoDireita->identificador;
 	id_semaforoMediador = semaforo->semaforoMediador->identificador;
 	
-	printf("ID semaforoUm: %d\n", id_semaforoUm);
-	printf("ID semaforoDois: %d\n", id_semaforoDois);
+	printf("ID semaforoEsquerda: %d\n", id_semaforoEsquerda);
+	printf("ID semaforoDireita: %d\n", id_semaforoDireita);
 	printf("ID semaforoMediador: %d\n", id_semaforoMediador);
 }
 
 void imprimirValores(SemaforoBidimensional *semaforo)
 {
-	int valor_semaforoUm;
-	int valor_semaforoDois;
+	int valor_semaforoEsquerda;
+	int valor_semaforoDireita;
 	int valor_semaforoMediador;
 	
-	valor_semaforoUm = semaforoBidimensional_semaforoUm_getValue(semaforo);
-	valor_semaforoDois = semaforoBidimensional_semaforoDois_getValue(semaforo);
+	valor_semaforoEsquerda = semaforoBidimensional_semaforoEsquerda_getValue(semaforo);
+	valor_semaforoDireita = semaforoBidimensional_semaforoDireita_getValue(semaforo);
 	valor_semaforoMediador = semaforoBidimensional_semaforoMediador_getValue(semaforo);
 	
-	printf("valor_semaforoUm: %d\n", valor_semaforoUm);
-	printf("valor_semaforoDois: %d\n", valor_semaforoDois);
+	printf("valor_semaforoEsquerda: %d\n", valor_semaforoEsquerda);
+	printf("valor_semaforoDireita: %d\n", valor_semaforoDireita);
 	printf("valor_semaforoMediador: %d\n", valor_semaforoMediador);
 }
 
@@ -40,9 +40,9 @@ int main()
 	imprimirValores(semaforo);
 	
 	
-	semaforoBidimensional_semaforoUm_utilize(semaforo);
-	semaforoBidimensional_semaforoUm_terminate(semaforo);
-	semaforoBidimensional_semaforoDois_utilize(semaforo);
+	semaforoBidimensional_semaforoEsquerda_utilize(semaforo);
+	semaforoBidimensional_semaforoEsquerda_terminate(semaforo);
+	semaforoBidimensional_semaforoDireita_utilize(semaforo);
 	printf("\n");
 	imprimirValores(semaforo);
 	
