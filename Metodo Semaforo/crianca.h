@@ -10,14 +10,16 @@ typedef struct _Crianca{
 	int numeroProcesso;
 	int tempoDecisao;
 	int lado;
+	int numeroTravessias;
 }Crianca;
 
-Crianca * crianca_create(int numeroProcesso, int tempoDecisao, int lado)
+Crianca * crianca_create(int numeroProcesso, int tempoDecisao, int lado, int numeroTravessias)
 {
 	Crianca *crianca = malloc(sizeof(Crianca));
 	crianca->numeroProcesso = numeroProcesso;
 	crianca->tempoDecisao = tempoDecisao;
 	crianca->lado = lado;
+	crianca->numeroTravessias = numeroTravessias;
 	
 	return crianca;
 }

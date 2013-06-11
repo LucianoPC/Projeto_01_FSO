@@ -89,6 +89,8 @@ int criar_identificador(key_t chave)
 		exit(-1);
 	}
 	
+	semctl(semaforo_id, 0, SETVAL, 0);
+	
 	return semaforo_id;
 }
 

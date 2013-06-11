@@ -25,15 +25,19 @@ void ponte_delete(Ponte *ponte)
 void ponte_atravessar_esquerdaParaDireita(Ponte *ponte, Crianca *crianca, int tempoTravessia)
 {
 	semaforoBidimensional_semaforoEsquerda_utilize(ponte->semaforo);
+	printf("\nCrianca: %d. ATRAVESSANDO a ponte da ESQUERDA para DIREITA\n", crianca->numeroProcesso);
 	usleep(tempoTravessia);
+	printf("\nCrianca: %d TERMINOU DE ATRAVESSAR a ponte da ESQUERDA para DIREITA\n", crianca->numeroProcesso);
 	semaforoBidimensional_semaforoEsquerda_terminate(ponte->semaforo);
 }
 
 void ponte_atravessar_direitaParaEsquerda(Ponte *ponte, Crianca *crianca, int tempoTravessia)
 {
 	semaforoBidimensional_semaforoDireita_utilize(ponte->semaforo);
+	printf("\nCrianca %d. ATRAVESSANDO a ponte da DIREITA para ESQUERDA\n", crianca->numeroProcesso);
 	usleep(tempoTravessia);
 	semaforoBidimensional_semaforoDireita_terminate(ponte->semaforo);
+	printf("\nCrianca %d. TERMINOU DE ATRAVESSAR a ponte da DIREITA para ESQUERDA\n", crianca->numeroProcesso);
 }
 
 
