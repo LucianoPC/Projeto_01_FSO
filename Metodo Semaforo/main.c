@@ -9,7 +9,13 @@
 #include "crianca.h"
 
 
-void entrarNaPonte(Ponte *ponte_shared, int segment_id, int numeroCrianca)
+#define MAXIMO_TEMPO_DECISAO 1000
+#define LIMITE_DO_NUMERO_TRAVESSIAS 4
+#define TEMPO_TRAVESSIA 70
+#define NUMERO_LADOS_NA_PONTE 2
+
+
+void concorrerAPonte(Ponte *ponte_shared, int segment_id, int numeroCrianca)
 {
 	int lado = rand() % NUMERO_LADOS_NA_PONTE;
 	int numeroTravessias = 1 + rand() % LIMITE_DO_NUMERO_TRAVESSIAS;
@@ -17,7 +23,16 @@ void entrarNaPonte(Ponte *ponte_shared, int segment_id, int numeroCrianca)
 	Crianca *crianca = crianca_create(numeroCrianca, lado, numeroTravessias);
 	
 	while(crianca_possuiTravessias(crianca))
-		ponte_atravessar_crianca(ponte_shared, crianca);
+	{
+		crianca_gerarTempoDeDecisao(crianca, MAXIMO_TEMPO_DECISAO);
+		
+		if(crianca->lado == ESQUERDA)
+			ponte_atravessarCrianca_daEsquerdaParaDireita(ponte_shared, crianca, TEMPO_TRAVESSIA);
+		else
+			ponte_atravessarCrianca_daDireitaParaEsquerda(ponte_shared, crianca, TEMPO_TRAVESSIA);
+		
+		crianca_decrementarNumeroTravessias(crianca);
+	}
 }
 
 void gerarNumerosRandomicosParaOProcesso(int numeroVariavel)
@@ -44,7 +59,7 @@ pid_t gerarProcessosFilhos(int numeroProcessosFilhos, Ponte *ponte_shared, int s
 			child_pid = fork();
 			gerarNumerosRandomicosParaOProcesso(indice);
 			if(processoEhFilho(child_pid))
-				entrarNaPonte(ponte_shared, segment_id, indice+1);
+				concorrerAPonte(ponte_shared, segment_id, indice+1);
 		}	
 	}
 	
@@ -74,7 +89,6 @@ int main()
 	if(numeroProcessosFilhos <= 0)
 	{
 		printf("\nO numero de criancas deve ser maior que zero\n\n");
-		ponte_delete(ponte_shared);
 		return -1;
 	}
 	
