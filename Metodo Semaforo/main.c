@@ -8,7 +8,7 @@
 #include "ponte.h"
 #include "crianca.h"
 
-void entrarNaPonte(Ponte *ponte_shared_memory, int segment_id, int numeroCrianca)
+void entrarNaPonte(Ponte *ponte_shared, int segment_id, int numeroCrianca)
 {
 	int lado = rand() % 2;
 	int numeroTravessias = 1 + rand() % 4;
@@ -19,19 +19,19 @@ void entrarNaPonte(Ponte *ponte_shared_memory, int segment_id, int numeroCrianca
 	
 	while(crianca->numeroTravessias > 0)
 	{
-		crianca_gerarTempoDeDecisao(crianca, 10);
+		crianca_gerarTempoDeDecisao(crianca, 5);
 			
 		if(crianca->lado == ESQUERDA)
-			ponte_atravessar_esquerdaParaDireita(ponte_shared_memory, crianca, 10);
+			ponte_atravessar_esquerdaParaDireita(ponte_shared, crianca, 10);
 		else
-			ponte_atravessar_direitaParaEsquerda(ponte_shared_memory, crianca, 10);
+			ponte_atravessar_direitaParaEsquerda(ponte_shared, crianca, 10);
 		
 		crianca->numeroTravessias--;
 	}
 	
 }
 
-void gerarProcessosFilhos(int numeroProcessosFilhos, Ponte *ponte_shared_memory, int segment_id)
+void gerarProcessosFilhos(int numeroProcessosFilhos, Ponte *ponte_shared, int segment_id)
 {
 	int indice;
 	pid_t child_pid;
@@ -42,14 +42,14 @@ void gerarProcessosFilhos(int numeroProcessosFilhos, Ponte *ponte_shared_memory,
 			child_pid = fork();
 			srand((indice+1) * 13 * time(NULL));
 			if(child_pid == 0)
-				entrarNaPonte(ponte_shared_memory, segment_id, indice+1);
+				entrarNaPonte(ponte_shared, segment_id, indice+1);
 		}else{
 			if(child_pid != 0)
 			{
 				child_pid = fork();
 				srand((indice+1) * 13 * time(NULL));
 				if(child_pid == 0)
-					entrarNaPonte(ponte_shared_memory, segment_id, indice+1);
+					entrarNaPonte(ponte_shared, segment_id, indice+1);
 			}
 		}		
 	}
@@ -66,7 +66,7 @@ void esperarProcessosFilhosTerminarem(int numeroProcessosFilhos)
 int main()
 {
 	int numeroProcessosFilhos;
-	Ponte *ponte_shared_memory;
+	Ponte *ponte_shared;
 	int segment_id;
 	pid_t child_pid;
 		
@@ -76,19 +76,19 @@ int main()
 	if(numeroProcessosFilhos <= 0)
 	{
 		printf("\nO numero de criancas deve ser maior que zero\n\n");
-		ponte_encerrarPonteComMemoriaCompartilhada(ponte_shared_memory, segment_id);
+		ponte_delete(ponte_shared);
 		return -1;
 	}
 	
-	printf("\nCrianca \t NumTravessias \t tempoDecisao \t Lado \t\t Estado\n\n");
+	printf("\nCrianca \t Lado \t\t Estado \t NumTravessias \t tempoDecisao\n\n");
 	
-	ponte_shared_memory = ponte_criarPonteComMemoriaCompartilhada(&segment_id);
-	gerarProcessosFilhos(numeroProcessosFilhos, ponte_shared_memory, segment_id);	
+	ponte_shared = ponte_create();
+	gerarProcessosFilhos(numeroProcessosFilhos, ponte_shared, segment_id);	
 	
 	if(child_pid != 0)
 	{
 		esperarProcessosFilhosTerminarem(numeroProcessosFilhos);
-		ponte_encerrarPonteComMemoriaCompartilhada(ponte_shared_memory, segment_id);
+		ponte_delete(ponte_shared);
 	}
 	
 	
