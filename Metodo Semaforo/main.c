@@ -24,7 +24,7 @@ void entrarNaPonte(Ponte *ponte_shared_memory, int segment_id, int numeroCrianca
 		if(crianca->lado == ESQUERDA)
 			ponte_atravessar_esquerdaParaDireita(ponte_shared_memory, crianca, 10);
 		else
-			ponte_atravessar_direitaParaEsquerda(ponte_shared_memory, crianca, 10)
+			ponte_atravessar_direitaParaEsquerda(ponte_shared_memory, crianca, 10);
 		
 		crianca->numeroTravessias--;
 	}
@@ -72,9 +72,7 @@ int main()
 		
 	printf("\n Digite o Numero de Criancas para atravessar a Ponte: ");
 	scanf("%d", &numeroProcessosFilhos);
-		
-	ponte_shared_memory = ponte_criarPonteComMemoriaCompartilhada(&segment_id);
-		
+	
 	if(numeroProcessosFilhos <= 0)
 	{
 		printf("\nO numero de criancas deve ser maior que zero\n\n");
@@ -83,7 +81,8 @@ int main()
 	}
 	
 	printf("\nCrianca \t NumTravessias \t tempoDecisao \t Lado \t\t Estado\n\n");
-		
+	
+	ponte_shared_memory = ponte_criarPonteComMemoriaCompartilhada(&segment_id);
 	gerarProcessosFilhos(numeroProcessosFilhos, ponte_shared_memory, segment_id);	
 	
 	if(child_pid != 0)
