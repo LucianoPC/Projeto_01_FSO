@@ -7,16 +7,16 @@
 #define DIREITA 1
 
 typedef struct _Crianca{
-	int numeroProcesso;
+	int numero;
 	int tempoDecisao;
 	int lado;
 	int numeroTravessias;
 }Crianca;
 
-Crianca * crianca_create(int numeroProcesso, int tempoDecisao, int lado, int numeroTravessias)
+Crianca * crianca_create(int numero, int tempoDecisao, int lado, int numeroTravessias)
 {
 	Crianca *crianca = malloc(sizeof(Crianca));
-	crianca->numeroProcesso = numeroProcesso;
+	crianca->numero = numero;
 	crianca->tempoDecisao = tempoDecisao;
 	crianca->lado = lado;
 	crianca->numeroTravessias = numeroTravessias;
@@ -24,17 +24,32 @@ Crianca * crianca_create(int numeroProcesso, int tempoDecisao, int lado, int num
 	return crianca;
 }
 
-crianca_delete(Crianca *crianca)
+void crianca_delete(Crianca *crianca)
 {
 	free(crianca);
 }
 
-crianca_ESQUERDA()
+void crianca_gerarTempoDeDecisao(Crianca *crianca, int tempoMaximo)
+{
+	crianca->tempoDecisao = rand() % (tempoMaximo + 1);
+}
+
+char * crianca_getLado(Crianca *crianca)
+{
+	//printf("\n\n LADO: %d\n\n", crianca->lado);
+
+	if(crianca->lado == ESQUERDA)
+		return "Esquerdo";
+	else
+		return "Direito";
+}
+
+int crianca_ESQUERDA()
 {
 	return ESQUERDA;
 }
 
-crianca_DIREITA()
+int crianca_DIREITA()
 {
 	return DIREITA;
 }
