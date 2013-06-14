@@ -8,51 +8,47 @@
 #include "ponte.h"
 #include "crianca.h"
 
+
 void entrarNaPonte(Ponte *ponte_shared, int segment_id, int numeroCrianca)
 {
-	int lado = rand() % 2;
-	int numeroTravessias = 1 + rand() % 4;
-	
-	int tempoDecisao = 0;
-	
-	Crianca *crianca = crianca_create(numeroCrianca, tempoDecisao, lado, numeroTravessias);
-	
-	while(crianca->numeroTravessias > 0)
-	{
-		crianca_gerarTempoDeDecisao(crianca, 5);
-			
-		if(crianca->lado == ESQUERDA)
-			ponte_atravessar_esquerdaParaDireita(ponte_shared, crianca, 10);
-		else
-			ponte_atravessar_direitaParaEsquerda(ponte_shared, crianca, 10);
+	int lado = rand() % NUMERO_LADOS_NA_PONTE;
+	int numeroTravessias = 1 + rand() % LIMITE_DO_NUMERO_TRAVESSIAS;
 		
-		crianca->numeroTravessias--;
-	}
+	Crianca *crianca = crianca_create(numeroCrianca, lado, numeroTravessias);
 	
+	while(crianca_possuiTravessias(crianca))
+		ponte_atravessar_crianca(ponte_shared, crianca);
 }
 
-void gerarProcessosFilhos(int numeroProcessosFilhos, Ponte *ponte_shared, int segment_id)
+void gerarNumerosRandomicosParaOProcesso(int numeroVariavel)
+{
+	srand((numeroVariavel+1) * 13 * time(NULL));
+}
+
+int processoEhFilho(pid_t child_pid)
+{
+	if(child_pid == 0)
+		return 1;
+	else
+		return 0;
+}
+
+pid_t gerarProcessosFilhos(int numeroProcessosFilhos, Ponte *ponte_shared, int segment_id)
 {
 	int indice;
 	pid_t child_pid;
 	for(indice = 0; indice < numeroProcessosFilhos; indice++)
 	{
-		if(indice == 0)
+		if( (indice == 0) || (!processoEhFilho(child_pid)) )
 		{
 			child_pid = fork();
-			srand((indice+1) * 13 * time(NULL));
-			if(child_pid == 0)
+			gerarNumerosRandomicosParaOProcesso(indice);
+			if(processoEhFilho(child_pid))
 				entrarNaPonte(ponte_shared, segment_id, indice+1);
-		}else{
-			if(child_pid != 0)
-			{
-				child_pid = fork();
-				srand((indice+1) * 13 * time(NULL));
-				if(child_pid == 0)
-					entrarNaPonte(ponte_shared, segment_id, indice+1);
-			}
-		}		
+		}	
 	}
+	
+	return child_pid;
 }
 
 void esperarProcessosFilhosTerminarem(int numeroProcessosFilhos)
@@ -69,7 +65,9 @@ int main()
 	Ponte *ponte_shared;
 	int segment_id;
 	pid_t child_pid;
-		
+	int indice;
+	int child_status;
+	
 	printf("\n Digite o Numero de Criancas para atravessar a Ponte: ");
 	scanf("%d", &numeroProcessosFilhos);
 	
@@ -83,9 +81,9 @@ int main()
 	printf("\nCrianca \t Lado \t\t Estado \t NumTravessias \t tempoDecisao\n\n");
 	
 	ponte_shared = ponte_create();
-	gerarProcessosFilhos(numeroProcessosFilhos, ponte_shared, segment_id);	
+	child_pid = gerarProcessosFilhos(numeroProcessosFilhos, ponte_shared, segment_id);	
 	
-	if(child_pid != 0)
+	if(!processoEhFilho(child_pid))
 	{
 		esperarProcessosFilhosTerminarem(numeroProcessosFilhos);
 		ponte_delete(ponte_shared);
