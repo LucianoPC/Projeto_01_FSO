@@ -15,7 +15,7 @@
 #define NUMERO_LADOS_NA_PONTE 2
 
 
-Crianca * criarCrianca()
+Crianca * criarCrianca(int numeroCrianca)
 {
 	int lado = rand() % NUMERO_LADOS_NA_PONTE;
 	int numeroTravessias = 1 + rand() % LIMITE_DO_NUMERO_TRAVESSIAS;
@@ -27,7 +27,7 @@ Crianca * criarCrianca()
 
 void concorrerAPonte(Ponte *ponte_shared, int segment_id, int numeroCrianca)
 {
-	Crianca *crianca = criarCrianca();
+	Crianca *crianca = criarCrianca(numeroCrianca);
 	
 	while(crianca_possuiTravessias(crianca))
 	{
