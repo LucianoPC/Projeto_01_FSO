@@ -12,10 +12,10 @@ typedef struct _Semaforo
 	int aquisicoes;
 }Semaforo;
 
-Semaforo * semaforo_create()
+Semaforo * semaforo_create(int projeto_identificador)
 {
 	Semaforo *semaforo = malloc(sizeof(Semaforo));
-	semaforo->filaDeMensagem = filaDeMensagem_create('B');
+	semaforo->filaDeMensagem = filaDeMensagem_create(projeto_identificador);
 	semaforo->aquisicoes = 0;
 	
 	return semaforo;
